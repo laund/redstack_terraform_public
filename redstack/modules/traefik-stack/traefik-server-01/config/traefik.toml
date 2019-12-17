@@ -1,0 +1,129 @@
+[providers.docker]
+  endpoint = "unix:///var/run/docker.sock"
+
+[api]
+    dashboard = true
+    insecure = true
+
+[entryPoints]
+    [entryPoints.traefik]
+    address = ":8081"
+    [entryPoints.vault]
+    address = ":8200"
+    [entryPoints.consul]
+    address = ":8500"
+    [entryPoints.cassandra]
+    address = ":9042"
+    [entryPoints.rabbitmq]
+    address = ":15672"
+
+[tcp.services]
+  [tcp.services.consul-lb]
+    [[tcp.services.consul-lb.weighted.services]]
+      name = "consul-server-1"
+      weight = 1
+    [[tcp.services.consul-lb.weighted.services]]
+      name = "consul-server-2"
+      weight = 1
+    [[tcp.services.consul-lb.weighted.services]]
+      name = "consul-server-3"
+      weight = 1
+
+  [tcp.services.consul-server-1]
+    [tcp.services.consul-server-1.loadBalancer]
+      [[tcp.services.consul-server-1.loadBalancer.servers]]
+        address = "10.5.0.2:8500/"
+
+  [tcp.services.consul-server-2]
+    [tcp.services.consul-server-2.loadBalancer]
+      [[tcp.services.consul-server-2.loadBalancer.servers]]
+        address = "10.5.0.3:8500/"
+
+  [tcp.services.consul-server-3]
+    [tcp.services.consul-server-3.loadBalancer]
+      [[tcp.services.consul-server-3.loadBalancer.servers]]
+        address = "10.5.0.4:8500/"
+
+  [tcp.services.vault-lb]
+    [[tcp.services.vault-lb.weighted.services]]
+      name = "vault-server-1"
+      weight = 5
+    [[tcp.services.vault-lb.weighted.services]]
+      name = "vault-server-2"
+      weight = 1
+
+  [tcp.services.vault-server-1]
+    [tcp.services.vault-server-1.loadBalancer]
+      [[tcp.services.vault-server-1.loadBalancer.servers]]
+        address = "10.5.0.5:8200/"
+
+  [tcp.services.vault-server-2]
+    [tcp.services.vault-server-2.loadBalancer]
+      [[tcp.services.vault-server-2.loadBalancer.servers]]
+        address = "10.5.0.6:8200/"
+
+  [tcp.services.rabbitmq-lb]
+    [[tcp.services.rabbitmq-lb.weighted.services]]
+      name = "rabbitmq-server-1"
+      weight = 1
+    [[tcp.services.rabbitmq-lb.weighted.services]]
+      name = "rabbitmq-server-2"
+      weight = 1
+    [[tcp.services.rabbitmq-lb.weighted.services]]
+      name = "rabbitmq-server-2"
+      weight = 1
+
+  [tcp.services.rabbitmq-server-1]
+    [tcp.services.rabbitmq-server-1.loadBalancer]
+      [[tcp.services.rabbitmq-server-1.loadBalancer.servers]]
+        address = "10.5.0.21:15672/"
+
+  [tcp.services.rabbitmq-server-2]
+    [tcp.services.rabbitmq-server-2.loadBalancer]
+      [[tcp.services.rabbitmq-server-2.loadBalancer.servers]]
+        address = "10.5.0.22:15672/"
+
+  [tcp.services.rabbitmq-server-3]
+    [tcp.services.rabbitmq-server-3.loadBalancer]
+      [[tcp.services.rabbitmq-server-3.loadBalancer.servers]]
+        address = "10.5.0.23:15672/"
+
+  [tcp.services.cassandra-lb]
+    [[tcp.services.cassandra-lb.weighted.services]]
+      name = "cassandra-server-1"
+      weight = 1
+    [[tcp.services.rabbitmq-lb.weighted.services]]
+      name = "cassandra-server-2"
+      weight = 1
+    [[tcp.services.rabbitmq-lb.weighted.services]]
+      name = "cassandra-server-2"
+      weight = 1
+
+  [tcp.services.cassandra-server-1]
+    [tcp.services.cassandra-server-1.loadBalancer]
+      [[tcp.services.cassandra-server-1.loadBalancer.servers]]
+        address = "10.5.0.9:9042/"
+
+  [tcp.services.cassandra-server-2]
+    [tcp.services.cassandra-server-2.loadBalancer]
+      [[tcp.services.cassandra-server-2.loadBalancer.servers]]
+        address = "10.5.0.10:9042/"
+
+  [tcp.services.cassandra-server-3]
+    [tcp.services.cassandra-server-3.loadBalancer]
+      [[tcp.services.cassandra-server-3.loadBalancer.servers]]
+        address = "10.5.0.11:9042/"
+
+  [metrics]
+    [metrics.prometheus]
+      buckets = [0.1,0.3,1.2,5.0]
+      addEntryPointsLabels = true
+      addServicesLabels = true
+
+  [log]
+    filePath = "/var/log/traefik.log"
+    format = "json"
+
+  [accessLog]
+    filePath = "/var/log/traefik.log"
+    bufferingSize = 100
