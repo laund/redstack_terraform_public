@@ -8,15 +8,9 @@ variable "vault_token" {
   default     = ""
 }
 
-variable "cassandra_hosts" {
-  description = "Address Cassandra Cluster"
-  type        = "list"
-  default     = [""]
-}
-
 variable "rabbitmq_addr" {
   description = "RabbitMq Address"
-  default     = "http://rabbitmq.redstack.local"
+  default     = ""
 }
 
 variable "rabbitmq_guest_password" {

@@ -1,45 +1,10 @@
-## REDSTACK CLUSTER
+## A series of articles for building a laboratory using technologies such as:
 
-# Create Network
+- Terraform (IAC)
+- Consul (Service Discovery)
+- Vault (Dynamic Secrets)}
+- Traefik (load balancing)
+- Rabbitmq (management queues)
+- Cassandra (DB)
 
-```bash
-terraform apply -target=module.network
-```
-
-# Deploy Traefik
-
-```bash
-terraform apply -target=module.traefik
-```
-
-# Deploy Consul Cluster
-
-```bash
-terraform apply -target=module.consul_cluster
-```
-
-# Create Acl's Consul
-
-```bash
-docker exec -it consul-server-1 /bin/sh  
-
-consul acl bootstrap  
-
-export CONSUL_HTTP_TOKEN=<SecretToken>  
-
-consul acl set-agent-token default "<SecretToken>"  
-
-```
-
-```bash
-terraform apply -target=module.vault_cluster
-```
-
-```bash
-terraform apply -target=module.registrator
-```
-
-```bash
-terraform apply -target=module.cassandra_cluster
-```
-### Under Construction :)
+https://dev.to/sl4ck/

@@ -9,7 +9,7 @@ resource "docker_container" "container-vault" {
   must_run = true
   name     = "vault-server-${count.index +1}"
 
-  env     = ["SERVICE=vault", "PROJECT=redstack", "ENVIRONMENT=production", "VAULT_ADDR=http://0.0.0.0:8200", "CONSUL_HTTP_TOKEN=<SecretAclToken>", "--dns=10.5.0.2"]
+  env     = ["SERVICE=vault", "PROJECT=redstack", "ENVIRONMENT=production", "VAULT_ADDR=http://0.0.0.0:8200", "CONSUL_HTTP_TOKEN=<CONSUL ACL Token>", "--dns=10.5.0.2"]
   command = ["server"]
   restart = "no"
 

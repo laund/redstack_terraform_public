@@ -8,7 +8,8 @@ variable "src_volume_mnesia_rabbitmq" {
   default     = ""
 }
 
-variable "src_volume_config_rabbitmq" {
-  description = "Docker volume Config"
-  default     = ""
-}
+#variable "src_volume_config_rabbitmq" {
+#  description = "Docker volume Config"
+#  default     = ""
+#}
+

@@ -11,11 +11,12 @@ resource "docker_container" "container-rabbitmq" {
 
   env = ["SERVICE=rabbitmq", "PROJECT=redstack", "ENVIRONMENT=production", "AUTOCLUSTER_TYPE=consul", "CONSUL_HOST=consul-server-1",
     "CONSUL_PORT=8500",
-    "CONSUL_HTTP_TOKEN=<SecretAclToken>",
+    "CONSUL_HTTP_TOKEN=<CONSUL ACL Token>",
     "CONSUL_SVC=rabbitmq",
     "CONSUL_SVC_ADDR_AUTO=true",
     "AUTOCLUSTER_CLEANUP=true",
     "CLEANUP_WARN_ONLY=false",
+    "--dns=10.5.0.2",
     "RABBITMQ_ERLANG_COOKIE=secrect",
   ]
 

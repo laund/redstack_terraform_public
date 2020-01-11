@@ -2,7 +2,7 @@
     "backend": {
       "consul": {
         "address": "consul-server-1:8500",
-        "token": "<SecretAclToken>",
+        "token": "<CONSUL Acl Token>",
         "path": "vault/"
       }
     },
@@ -19,4 +19,4 @@
    }
  ],
     "ui": true
-  }
+}
