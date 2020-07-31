@@ -3,15 +3,32 @@ resource "docker_image" "consul" {
   keep_locally = "false"
 }
 
-resource "docker_container" "container-consul" {
-  count    = "${var.count-consul}"
-  image    = "${docker_image.consul.latest}"
+resource "docker_container" "consul" {
+  count    = var.count_consul_server
+  image    = docker_image.consul.latest
   must_run = true
-  name     = "consul-server-${count.index +1}"
+  name     = "${var.name}-${count.index + 1}"
+  hostname = "${var.name}-${count.index + 1}"
 
-  env     = ["SERVICE=consul", "PROJECT=redstack", "ENVIRONMENT=production", "CONSUL_BOOTSTRAP_EXPECT=3"]
+  labels {
+    label = "traefik.http.routers.consul-lb.rule"
+    value = "Host(`consul.redstack.local`)"
+  }
+
+  labels {
+    label = "traefik.http.services.consul-server-1.loadbalancer.server.port"
+    value = "8500"
+  }
+
+  env     = [
+    "SERVICE=consul",
+    "PROJECT=redstack",
+    "ENVIRONMENT=production",
+    "CONSUL_BOOTSTRAP_EXPECT=3"
+  ]
+
   restart = "always"
-
+  
   ports {
     internal = 8301
     protocol = "tcp"
@@ -52,19 +69,15 @@ resource "docker_container" "container-consul" {
     protocol = "udp"
   }
 
-  volumes = {
+  volumes {
     container_path = "/consul/config/"
-    host_path      = "${var.src_volume_consul}-0${count.index +1}/"
+    host_path      = "${var.src_volume_consul}-0${count.index + 1}/"
     read_only      = false
   }
 
-  networks_advanced = {
+  networks_advanced {
     name         = "redstack_network"
-    ipv4_address = "10.5.0.${count.index +2}"
+    ipv4_address = "10.5.0.${count.index + 2}"
   }
-
-  labels = {
-    traefik.http.routers.consul-lb.rule                            = "Host(`consul.redstack.local`)"
-    traefik.http.services.consul-server-1.loadbalancer.server.port = "8500"
-  }
+  
 }

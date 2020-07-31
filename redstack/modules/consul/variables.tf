@@ -1,9 +1,14 @@
-variable "count-consul" {
+variable "count_consul_server" {
+  type        = string
   description = "Number of container in cluster"
-  default     = ""
 }
 
 variable "src_volume_consul" {
-  description = "Source Volume Consul Server"
-  default     = ""
+  type        = string
+  description = "The path on the host where the volume is coming from"
+}
+
+variable "name" {
+  type        = string
+  description = "The name of the Docker container"
 }

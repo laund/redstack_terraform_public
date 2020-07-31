@@ -1,9 +1,15 @@
 variable "count-cassandra" {
+  type        = string
   description = "Number of container in cluster"
-  default     = ""
+}
+
+variable "name" {
+  type        = string
+  description = "The name of the Docker container"
 }
 
 variable "src_volume_cassandra" {
-  description = "Source Volume Vault Server"
-  default     = ""
+  type        = string
+  description = "Source Docker Volume Cassandra Server"
 }
+
