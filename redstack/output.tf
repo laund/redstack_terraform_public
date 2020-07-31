@@ -1,29 +1,48 @@
-output "traefik_server_ip" {
-  value       = "${module.traefik.ip_traefik}"
-  description = "IP Traefik"
+output "network_name" {
+  value       = module.network.name
+  description = "Docker network name"
+}
+
+output "network_id" {
+  value       = module.network.id
+  description = "Docker network id"
+}
+
+output "network_scope" {
+  value       = module.network.scope
+  description = "Docker network scope"
+}
+
+output "traefik_ip" {
+  value       = module.traefik.ip
+  description = "The IP addresses of the container on each network"
 }
 
 output "consul_cluster_ip" {
-  value       = "${module.consul_cluster.ip_consul}"
-  description = "Consul Cluster IP Servers"
+  value       = module.consul_cluster.ip
+  description = "The IP addresses of the container on each network"
 }
 
 output "vault_cluster_ip" {
-  value       = "${module.vault_cluster.ip_vault}"
-  description = "Vault Cluster IP Servers"
+  value       = module.vault_cluster.ip
+  description = "The IP addresses of the container on each network"
 }
 
 output "rabbitmq_cluster_ip" {
-  value       = "${module.rabbitmq_cluster.ip_rabbitmq}"
-  description = "Rabbitmq Cluster IP Servers"
+  value       = module.rabbitmq_cluster.ip
+  description = "The IP addresses of the container on each network"
+}
+
+output "admin_password" {
+  value = module.rabbitmq_runtime.password
 }
 
 output "registrator_cluster_ip" {
-  value       = "${module.registrator.ip_registrator}"
-  description = "Registrator Server IP"
+  value       = module.registrator.ip
+  description = "The IP addresses of the container on each network"
 }
 
 output "cassandra_cluster_ip" {
-  value       = "${module.cassandra_cluster.ip_cassandra}"
-  description = "Cassandra Cluster IP Servers"
+  value       = module.cassandra_cluster.ip
+  description = "The IP addresses of the container on each network"
 }

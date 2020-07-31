@@ -10,13 +10,13 @@ resource "random_password" "admin_password" {
 
 resource "rabbitmq_user" "admin" {
   name     = "admin"
-  password = "${random_password.admin_password.result}"
+  password = random_password.admin_password.result
   tags     = ["administrator"]
 }
 
 resource "rabbitmq_permissions" "admin" {
   user  = "admin"
-  vhost = "${rabbitmq_vhost.vhost.name}"
+  vhost = rabbitmq_vhost.vhost.name
 
   permissions {
     configure = ".*"
@@ -27,7 +27,7 @@ resource "rabbitmq_permissions" "admin" {
 
 resource "rabbitmq_queue" "hello" {
   name  = "hello"
-  vhost = "${rabbitmq_permissions.admin.vhost}"
+  vhost = rabbitmq_permissions.admin.vhost
 
   settings {
     durable     = false
@@ -37,7 +37,7 @@ resource "rabbitmq_queue" "hello" {
 
 resource "rabbitmq_policy" "ha-lbh" {
   name  = "ha-lbh"
-  vhost = "${rabbitmq_permissions.admin.vhost}"
+  vhost = rabbitmq_permissions.admin.vhost
 
   policy {
     pattern  = ".*"

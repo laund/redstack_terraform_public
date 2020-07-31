@@ -1,36 +1,44 @@
 module "network" {
-  source       = "./modules/network"
-  network_name = "${var.network_name}"
-  subnet       = "${var.subnet}"
+  source = "./modules/network"
+
+  network_name = "redstack_network"
+  subnet       = "10.5.0.0/16"
 }
 
 module "traefik" {
-  source             = "./modules/traefik"
-  src_volume_traefik = "${var.src_volume_traefik}"
+  source = "./modules/traefik"
+
+  name                 = "traefik-server-1"
+  count_traefik_server = "1"
+  src_volume_traefik   = "/opt/github/redstack_terraform_public/redstack/data/traefik-server"
 }
 
 module "consul_cluster" {
-  source            = "./modules/consul"
-  count-consul      = "3"
-  src_volume_consul = "${var.src_volume_consul}"
+  source = "./modules/consul"
+
+  name                = "consul-server"
+  count_consul_server = "3"
+  src_volume_consul   = "/opt/github/redstack_terraform_public/redstack/data/consul-server"
 }
 
 module "consul_runtime" {
-  source            = "./modules/consul-runtime"
-  consul_addr       = "${var.consul_addr}"
-  consul_datacenter = "${var.consul_datacenter}"
+  source = "./modules/consul-runtime"
 }
 
 module "vault_cluster" {
-  source           = "./modules/vault"
+  source = "./modules/vault"
+
   count-vault      = "2"
-  src_volume_vault = "${var.src_volume_vault}"
+  name             = "vault-server"
+  src_volume_vault = "/opt/github/redstack_terraform_public/redstack/data/vault-server"
 }
 
 module "rabbitmq_cluster" {
-  source                     = "./modules/rabbitmq"
+  source = "./modules/rabbitmq"
+
   count-rabbitmq             = "3"
-  src_volume_mnesia_rabbitmq = "${var.src_volume_mnesia_rabbitmq}"
+  name                       = "rabbitmq-server"
+  src_volume_mnesia_rabbitmq = "/opt/github/redstack_terraform_public/redstack/data/rabbitmq-server"
 }
 
 module "rabbitmq_runtime" {
@@ -38,25 +46,29 @@ module "rabbitmq_runtime" {
 }
 
 module "vault_rabbitmq_runtime" {
-  source        = "./modules/vault-rabbitmq-runtime"
-  vault_addr    = "${var.vault_addr}"
-  vault_token   = "${var.vault_token}"
-  rabbitmq_addr = "${var.rabbitmq_addr}"
+  source = "./modules/vault-rabbitmq-runtime"
+
+  rabbitmq_admin_login    = "admin"
+  rabbitmq_admin_password = module.rabbitmq_runtime.password
+  rabbitmq_addr           = var.rabbitmq_addr
 }
 
 module "registrator" {
   source = "./modules/registrator"
+
+  name                     = "registrator-server-1"
+  count_registrator_server = "1"
 }
 
 module "cassandra_cluster" {
-  source               = "./modules/cassandra"
+  source = "./modules/cassandra"
+
   count-cassandra      = "3"
-  src_volume_cassandra = "${var.src_volume_cassandra}"
+  name                 = "cassandra-server"
+  src_volume_cassandra = "/opt/github/redstack_terraform_public/redstack/data/cassandra-server"
 }
 
 module "vault_cassandra_runtime" {
-  source          = "./modules/vault-cassandra-runtime"
-  vault_addr      = "${var.vault_addr}"
-  vault_token     = "${var.vault_token}"
-  cassandra_hosts = ["${var.cassandra_hosts}"]
+  source = "./modules/vault-cassandra-runtime"
+
 }
