@@ -3,15 +3,24 @@ resource "docker_image" "traefik" {
   keep_locally = "false"
 }
 
-resource "docker_container" "container-traefik" {
-  image    = "${docker_image.traefik.latest}"
+resource "docker_container" "traefik" {
+  count    = var.count_traefik_server
+  image    = docker_image.traefik.latest
   must_run = true
-  name     = "traefik-server-1"
 
-  hostname = "traefik-server-1"
-  env      = ["SERVICE=traefik", "PROJECT=redstack", "ENVIRONMENT=production", "SERVICE_NAME=traefik", "--dns=10.5.0.2"]
-  command  = ["--consul", "--consul.endpoint=consul-server-1:8500", "--consul.prefix=traefik"]
-  restart  = "no"
+  name     = var.name
+  hostname = var.name
+
+  env = [
+    "SERVICE=traefik",
+    "PROJECT=redstack",
+    "ENVIRONMENT=production",
+    "SERVICE_NAME=traefik",
+    "--dns=10.5.0.2",
+  ]
+
+  command = ["--consul", "--consul.endpoint=consul-server-1:8500", "--consul.prefix=traefik"]
+  restart = "no"
 
   ports {
     internal = 8080
@@ -23,20 +32,20 @@ resource "docker_container" "container-traefik" {
     protocol = "tcp"
   }
 
-  volumes = {
+  volumes {
     container_path = "/etc/traefik/"
-    host_path      = "${var.src_volume_traefik}-0${count.index +1}/config/"
+    host_path      = "${var.src_volume_traefik}-0${count.index + 1}/config/"
     read_only      = false
   }
 
-  volumes = {
+  volumes {
     container_path = "/var/run/docker.sock"
     host_path      = "/var/run/docker.sock"
     read_only      = false
   }
 
-  networks_advanced = {
+  networks_advanced {
     name         = "redstack_network"
-    ipv4_address = "10.5.0.${count.index +12}"
+    ipv4_address = "10.5.0.${count.index + 12}"
   }
 }

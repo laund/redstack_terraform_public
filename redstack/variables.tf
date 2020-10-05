@@ -1,34 +1,6 @@
-variable "network_name" {
-  default = "redstack_network"
-}
-
-variable "subnet" {
-  default = "10.5.0.0/16"
-}
-
-variable "src_volume_traefik" {
-  default = "/opt/github-personal/redstack_terraform_public/redstack/data/traefik-server"
-}
-
-variable "src_volume_consul" {
-  default = "/opt/github-personal/redstack_terraform_public/redstack/data/consul-server"
-}
-
-variable "src_volume_vault" {
-  default = "/opt/github-personal/redstack_terraform_public/redstack/data/vault-server"
-}
-
-variable "src_volume_cassandra" {
-  default = "/opt/github-personal/redstack_terraform_public/redstack/data/cassandra-server"
-}
-
-variable "src_volume_mnesia_rabbitmq" {
-  default = "/opt/github-personal/redstack_terraform_public/redstack/data/rabbitmq-server"
-}
-
 variable "consul_addr" {
   description = "Consul Address"
-  default     = "http://consul.redstack.local"
+  default     = "http://10.5.0.2:8500"
 }
 
 variable "consul_datacenter" {
@@ -37,29 +9,23 @@ variable "consul_datacenter" {
 }
 
 variable "consul_token" {
-  default     = "<Secret ID Consul>"
+  default     = "<Token Acl Bootstrap>"
   description = "Secret ID"
 }
 
 variable "vault_addr" {
   description = "Vault Address"
-  default     = "http://10.5.0.5"
+  default     = "http://10.5.0.5:8200"
 }
 
 variable "vault_token" {
   description = "Vault Token"
-  default     = "<Root Token Vault>"
-}
-
-variable "cassandra_hosts" {
-  description = "Address Cassandra Cluster"
-  type        = "list"
-  default     = ["10.5.0.9", "10.5.0.10", "10.5.0.11"]
+  default     = "<Vault Root Token>"
 }
 
 variable "rabbitmq_addr" {
   description = "RabbitMq Address"
-  default     = "http://10.5.0.21"
+  default     = "http://10.5.0.21:15672"
 }
 
 variable "rabbitmq_guest_login" {

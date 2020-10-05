@@ -16,25 +16,27 @@ resource "consul_acl_policy" "agent-consul-acl-policy" {
     node_prefix "" {
       policy = "write"
     }
-    RULE
+RULE
+
 }
 
 resource "consul_acl_token_policy_attachment" "attachment" {
-  token_id = "${random_uuid.randon_id.result}"
-  policy   = "${consul_acl_policy.agent-consul-acl-policy.name}"
+  token_id = random_uuid.randon_id.result
+  policy   = consul_acl_policy.agent-consul-acl-policy.name
 }
 
-resource "random_uuid" "randon_id" {}
+resource "random_uuid" "randon_id" {
+}
 
 resource "consul_acl_token" "agent-consul-acl-token" {
-  accessor_id = "${random_uuid.randon_id.result}"
+  accessor_id = random_uuid.randon_id.result
 
   description = "Agent Consul Token"
 
   local = false
 
   lifecycle {
-    ignore_changes = ["policies"]
+    ignore_changes = [policies]
   }
 }
 
@@ -59,12 +61,13 @@ resource "consul_acl_policy" "agent-vault-acl-policy" {
     session_prefix "" {
       policy = "write"
     }
-    RULE
+RULE
+
 }
 
 resource "consul_acl_token" "agent-vault-acl-token" {
   description = "Agent Vault Token"
-  policies    = ["${consul_acl_policy.agent-vault-acl-policy.name}"]
+  policies    = [consul_acl_policy.agent-vault-acl-policy.name]
   local       = false
 }
 
@@ -83,12 +86,13 @@ resource "consul_acl_policy" "agent-registrator-acl-policy" {
     node_prefix "" {
       policy = "read"
     }
-    RULE
+RULE
+
 }
 
 resource "consul_acl_token" "agent-registrator-acl-token" {
   description = "Agent Registrator Token"
-  policies    = ["${consul_acl_policy.agent-registrator-acl-policy.name}"]
+  policies    = [consul_acl_policy.agent-registrator-acl-policy.name]
   local       = false
 }
 
@@ -122,11 +126,13 @@ resource "consul_acl_policy" "agent-rabbitmq-acl-policy" {
     agent "" {
       policy = "write"
     }
-    RULE
+RULE
+
 }
 
 resource "consul_acl_token" "agent-rabbitmq-acl-token" {
   description = "Agent Rabbitmq Token"
-  policies    = ["${consul_acl_policy.agent-rabbitmq-acl-policy.name}"]
+  policies    = [consul_acl_policy.agent-rabbitmq-acl-policy.name]
   local       = false
 }
+

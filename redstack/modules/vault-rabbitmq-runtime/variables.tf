@@ -1,30 +1,15 @@
-variable "vault_addr" {
-  description = "Vault Address"
-  default     = ""
-}
-
-variable "vault_token" {
-  description = "Vault Token"
-  default     = ""
-}
-
 variable "rabbitmq_addr" {
-  description = "RabbitMq Address"
-  default     = ""
-}
-
-variable "rabbitmq_guest_password" {
-  default = ""
-}
-
-variable "rabbitmq_guest_login" {
-  default = ""
-}
-
-variable "rabbitmq_admin_password" {
-  default = ""
+  type        = string
+  description = "Specifies the RabbitMQ connection URI"
 }
 
 variable "rabbitmq_admin_login" {
-  default = ""
+  type        = string
+  description = "Specifies the RabbitMQ management administrator username"
 }
+
+variable "rabbitmq_admin_password" {
+  type        = string
+  description = "Specifies the RabbitMQ management administrator password"
+}
+

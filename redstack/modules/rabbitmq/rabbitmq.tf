@@ -3,21 +3,37 @@ resource "docker_image" "rabbitmq" {
   keep_locally = "true"
 }
 
-resource "docker_container" "container-rabbitmq" {
-  count    = "${var.count-rabbitmq}"
-  image    = "${docker_image.rabbitmq.latest}"
+resource "docker_container" "rabbitmq" {
+  count    = var.count-rabbitmq
+  image    = docker_image.rabbitmq.latest
   must_run = true
-  name     = "rabbitmq-server-${count.index +1}"
+  name     = "${var.name}-${count.index + 1}"
+  hostname = "${var.name}-${count.index + 1}"
 
-  env = ["SERVICE=rabbitmq", "PROJECT=redstack", "ENVIRONMENT=production", "AUTOCLUSTER_TYPE=consul", "CONSUL_HOST=consul-server-1",
+  labels {
+    label = "traefik.http.routers.rabbitmq-lb.rule"
+    value = "Host(`rabbitmq.redstack.local`)"
+  }
+
+  labels {
+    label = "traefik.http.services.rabbitmq-server-1.loadbalancer.server.port"
+    value = "15672"
+  }
+
+  env = [
+    "SERVICE=rabbitmq",
+    "PROJECT=redstack",
+    "ENVIRONMENT=production",
+    "AUTOCLUSTER_TYPE=consul",
+    "CONSUL_HOST=consul-server-1",
     "CONSUL_PORT=8500",
-    "CONSUL_HTTP_TOKEN=<CONSUL ACL Token>",
+    "CONSUL_HTTP_TOKEN=<Token Acl Consul>",
     "CONSUL_SVC=rabbitmq",
     "CONSUL_SVC_ADDR_AUTO=true",
     "AUTOCLUSTER_CLEANUP=true",
     "CLEANUP_WARN_ONLY=false",
     "--dns=10.5.0.2",
-    "RABBITMQ_ERLANG_COOKIE=secrect",
+    "RABBITMQ_ERLANG_COOKIE=secret",
   ]
 
   restart = "always"
@@ -32,19 +48,16 @@ resource "docker_container" "container-rabbitmq" {
     protocol = "tcp"
   }
 
-  volumes = {
+  volumes {
     container_path = "/var/lib/rabbitmq/mnesia/"
-    host_path      = "${var.src_volume_mnesia_rabbitmq}-0${count.index +1}/"
+    host_path      = "${var.src_volume_mnesia_rabbitmq}-0${count.index + 1}/"
     read_only      = false
   }
 
-  networks_advanced = {
+  networks_advanced {
     name         = "redstack_network"
-    ipv4_address = "10.5.0.${count.index +21}"
+    ipv4_address = "10.5.0.${count.index + 21}"
   }
 
-  labels = {
-    traefik.http.routers.rabbitmq-lb.rule                            = "Host(`rabbitmq.redstack.local`)"
-    traefik.http.services.rabbitmq-server-1.loadbalancer.server.port = "15672"
-  }
 }
+

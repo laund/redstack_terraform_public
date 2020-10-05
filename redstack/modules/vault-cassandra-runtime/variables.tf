@@ -10,6 +10,7 @@ variable "vault_token" {
 
 variable "cassandra_hosts" {
   description = "Address Cassandra Cluster"
-  type        = "list"
+  type        = list(string)
   default     = [""]
 }
+

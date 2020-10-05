@@ -1,15 +1,14 @@
 variable "count-rabbitmq" {
+  type        = string
   description = "Number of container in cluster"
-  default     = ""
+}
+
+variable "name" {
+  type        = string
+  description = "The name of the Docker container"
 }
 
 variable "src_volume_mnesia_rabbitmq" {
-  description = "Docker volume Mnesia"
-  default     = ""
+  type        = string
+  description = "Docker volume mount point Mnesia"
 }
-
-#variable "src_volume_config_rabbitmq" {
-#  description = "Docker volume Config"
-#  default     = ""
-#}
-
