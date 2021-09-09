@@ -2,7 +2,7 @@
 
 - Terraform (IAC)
 - Consul (Service Discovery)
-- Vault (Dynamic Secrets)}
+- Vault (Dynamic Secrets)
 - Traefik (load balancing)
 - Rabbitmq (management queues)
 - Cassandra (DB)
